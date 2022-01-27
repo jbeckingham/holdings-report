@@ -21,7 +21,7 @@ app.get("/investments/:id", (req, res) => {
     })
 })
 
-app.get("/holdingsReport", async (req, res) => {
+app.post("/holdingsReport", async (req, res) => {
   try {
     const [investments, companies] = await Promise.all([
       axios
@@ -32,12 +32,19 @@ app.get("/holdingsReport", async (req, res) => {
         .then((response) => response.data),
     ])
     const report = holdingsReport.generate(investments, companies)
-    // todo: export report
+    const result = await axios
+      .post(`${config.investmentsServiceUrl}/investments/export`, {
+        headers: {
+          "content-type": "text/csv",
+        },
+        body: report,
+      })
+      .then((response) => response.status)
+    res.sendStatus(result)
   } catch (e) {
     console.error(e)
     res.sendStatus(500)
   }
-  res.sendStatus(200)
 })
 
 app.listen(config.port, (err) => {
