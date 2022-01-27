@@ -88,7 +88,6 @@ describe("buildLineData", () => {
   })
 
   test("Builds line data with invalid company id", () => {
-    companyMap
     const result = buildLineData(
       investments[0],
       investments[0]["holdings"][0],
