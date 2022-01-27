@@ -2,7 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const config = require("config")
 const axios = require("axios")
-const holdingsReport = require("./services/holdings-report")
+const holdingsReport = require("./service/holdings-report")
 
 const app = express()
 
@@ -17,23 +17,27 @@ app.get("/investments/:id", (req, res) => {
     })
     .catch((e) => {
       console.error(e)
-      res.send(500)
+      res.sendStatus(500)
     })
 })
 
 app.get("/holdingsReport", async (req, res) => {
   try {
     const [investments, companies] = await Promise.all([
-      axios.get(`${config.investmentsServiceUrl}/investments`).data(),
-      axios.get(`${config.financialCompaniesServiceUrl}/companies`).data(),
+      axios
+        .get(`${config.investmentsServiceUrl}/investments`)
+        .then((response) => response.data),
+      axios
+        .get(`${config.financialCompaniesServiceUrl}/companies`)
+        .then((response) => response.data),
     ])
     const report = holdingsReport.generate(investments, companies)
     // todo: export report
   } catch (e) {
     console.error(e)
-    res.send(500)
+    res.sendStatus(500)
   }
-  res.send(200)
+  res.sendStatus(200)
 })
 
 app.listen(config.port, (err) => {

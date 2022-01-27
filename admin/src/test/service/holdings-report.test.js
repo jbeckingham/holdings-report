@@ -78,7 +78,7 @@ describe("convertToCsv", () => {
 
 describe("generate", () => {
   test("Generates csv report", () => {
-    const result = convertToCsv(investments, companies)
+    const result = generate(investments, companies)
     expect(result).toEqual(csv)
   })
 })

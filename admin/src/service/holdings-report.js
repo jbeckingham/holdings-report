@@ -1,4 +1,20 @@
-const { multiply } = require("ramda")
+const { multiply, pipe } = require("ramda")
+const { parse } = require("json2csv")
+
+const csvLabelMap = [
+  ["User", "userId"],
+  ["First Name", "firstName"],
+  ["Last Name", "lastName"],
+  ["Date", "date"],
+  ["Holding", "holding"],
+  ["Value", "value"],
+]
+
+const buildCsvLabelMap = () =>
+  csvLabelMap.map(([label, value]) => ({
+    label,
+    value,
+  }))
 
 const getCompanyMap = (companies) =>
   companies.reduce(
@@ -31,12 +47,11 @@ const buildReportData = (investments, companies) => {
   )
 }
 
-const convertToCsv = (report) => {}
-
-const generate = (investments, companies) => {
-  const reportData = buildReportData(investments, companies)
-  return convertToCsv(reportData)
+const convertToCsv = (report) => {
+  return parse(report, { fields: buildCsvLabelMap() })
 }
+
+const generate = pipe(buildReportData, convertToCsv)
 
 module.exports = {
   generate,
