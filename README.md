@@ -52,7 +52,7 @@ We're interested in how you break down the work and build your solution in a cle
      - Add functionality to the api and frontend to add filters to the request for this like time, user and company to avoid users unnecessarily requesting large volumes of data.
 
   3. What else would you have liked to improve given more time?
-     -I would have moved out the calls to the industries and companies services from index.js as I don’t think they belong in the route.
+     - I would have moved out the calls to the industries and companies services from index.js.
      - Implemented logic for when a company with an id cannot be found - whether that means skipping the record and logging the failures, having that row have an null value for that field or failing the whole export. I have left it as having an empty value for the holding name.
      - Similar to the above, I would have implemented better handling of invalid data/missing data. At the moment those entries would return empty on the report. Again, would have to decide whether to skip those rows or fail the whole process (could even take a “skip-invalid” parameter).
      - Move out the csv label mapping into config as this is something which could have fields added to at a later date.
